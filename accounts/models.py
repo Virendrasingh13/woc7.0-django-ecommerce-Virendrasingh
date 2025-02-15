@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
 from base.emails import send_account_activation_email
+from products.models import Product
 
 class Profile(BaseModel):
     user = models.OneToOneField(User , on_delete=models.CASCADE , related_name="profile")
@@ -13,6 +14,8 @@ class Profile(BaseModel):
     email_token = models.CharField(max_length=100 , null=True , blank=True)
     profile_image = models.ImageField(upload_to = 'profile')
 
+    def get_cart_count(self):
+        return CartItem.objects.filter(cart__is_paid = False, cart__user = self.user ).count()
 
 
 @receiver(post_save , sender = User)
@@ -27,3 +30,17 @@ def  send_email_token(sender , instance , created , **kwargs):
     except Exception as e:
         print(e)
 
+class Cart(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
+    is_paid = models.BooleanField(default=False)
+
+    def get_cart_total(self):
+        cart_items = self.cartitems.all()  # Corrected related_name
+        return sum(cart_item.product.price for cart_item in cart_items if cart_item.product)
+
+class CartItem(BaseModel):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cartitems')  # Corrected related_name
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def get_product_price(self):
+        return self.product.price if self.product else 0  # Avoids NoneType errors

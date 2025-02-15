@@ -1,8 +1,8 @@
 from pydoc import render_doc
 from tkinter import E
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
 from products.models import Product
-
 
 
 

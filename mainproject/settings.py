@@ -135,3 +135,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # LOGIN_REDIRECT_URL = '/home/'
 # LOGIUT_REDIRECT_URL = '/home/'
+
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP host
+EMAIL_HOST_USER = "work.virendrasingh13@gmail.com"  # Your email address
+EMAIL_HOST_PASSWORD = "Kavi@1234"  # Your email password
+EMAIL_PORT = 465  # SMTP port
+EMAIL_USE_SSL = True  # Use SSL for secure connection

@@ -6,7 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate , login , logout
 from django.http import HttpResponseRedirect,HttpResponse
 # Create your views here.
-from .models import Profile
+from .models import Profile 
+from base.emails import send_account_activation_email
+import uuid
+from products.models import Product
+from accounts.models import Cart,CartItem
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 
 
 def login_page(request):
@@ -57,6 +63,7 @@ def register_page(request):
         user_obj = User.objects.create(first_name = first_name , last_name= last_name , email = email , username = email)
         user_obj.set_password(password)
         user_obj.save()
+        
 
         messages.success(request, 'An email has been sent on your mail.')
         return HttpResponseRedirect(request.path_info)
@@ -75,3 +82,33 @@ def activate_email(request , email_token):
         return redirect('/')
     except Exception as e:
         return HttpResponse('Invalid Email token')
+    
+@login_required
+def profile_page(request):
+    profile = request.user.profile  # Fetch the profile
+    return render(request , 'accounts/profile.html',{"profile": profile})
+
+def logout_page(request):
+    logout(request)
+    return redirect('/')
+
+@login_required
+def cart_page(request):
+    cart = Cart.objects.filter(is_paid=False, user=request.user).first()  # Get the latest unpaid cart
+    cart_items = CartItem.objects.filter(cart=cart).select_related('product').prefetch_related('product__product_images')  
+    context = {'cart': cart, 'cart_items': cart_items}
+    return render(request, 'accounts/cart.html', context)
+
+@login_required
+def add_to_cart(request, uid):
+    product = Product.objects.get(uid = uid)
+    user = request.user
+    cart , _ = Cart.objects.get_or_create(user = user , is_paid = False)
+    cart_items = CartItem.objects.create(cart = cart , product = product )
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def remove_cart(request, cart_item_uid):
+    cart_item = get_object_or_404(CartItem, uid=cart_item_uid)  # Fetch or return 404
+    cart_item.delete()  # Delete the cart item
+    return redirect(request.META.get('HTTP_REFERER', 'cart'))  # Redirect back to cart page
