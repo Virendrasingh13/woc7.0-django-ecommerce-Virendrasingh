@@ -13,25 +13,32 @@
 
                 <div class="form-group">
                     {% if profile.profile_image %}
-                    <img class="rounded-circle" src="{{ profile.profile_image.url }}" alt="Profile Image" style="width: 100px; height: 100px;">
-                {% else %}
-                    <img class="rounded-circle" src="/static/images/default-profile.png" alt="Default Profile Image" style="width: 100px; height: 100px;">
-                {% endif %}
-                                </div>
-                <div class="form-group">
-                    <input class="form-control" required placeholder="First Name" name="first_name" type="text" value="{{ user.first_name }}">     
+                    <img class="rounded-circle" src="{{ profile.profile_image.url }}" alt="Profile Image"
+                        style="width: 100px; height: 100px;">
+                    {% else %}
+                    <img class="rounded-circle" src="/static/images/default-profile.png" alt="Default Profile Image"
+                        style="width: 100px; height: 100px;">
+                    {% endif %}
                 </div>
                 <div class="form-group">
-                    <input class="form-control" required placeholder="Last Name" name="last_name" type="text" value="{{ user.last_name }}">
+                    <input class="form-control" required placeholder="First Name" name="first_name" type="text"
+                        value="{{ user.first_name }}">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" required placeholder="Email" name="email" type="email" value="{{ user.email }}">
+                    <input class="form-control" required placeholder="Last Name" name="last_name" type="text"
+                        value="{{ user.last_name }}">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Phone Number" name="phone" type="text" value="{{ user.profile.phone }}">
+                    <input class="form-control" required placeholder="Email" name="email" type="email"
+                        value="{{ user.email }}">
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" placeholder="Address" name="address">{{ user.profile.address }}</textarea>
+                    <input class="form-control" placeholder="Phone Number" name="phone" type="text"
+                        value="{{ user.profile.phone }}">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="Address"
+                        name="address">{{ user.profile.address }}</textarea>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
@@ -39,8 +46,7 @@
             </form>
         </div>
     </div>
-    <!-- ============================ COMPONENT PROFILE END.// ================================= -->
+
 
 </section>
 {% endblock %}
-
