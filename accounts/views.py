@@ -15,6 +15,18 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
 
+#razor
+import razorpay
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from accounts.models import Cart  # Your cart model
+
+from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
+
+
+
 def login_page(request):
     
     if request.method == 'POST':
@@ -112,3 +124,28 @@ def remove_cart(request, cart_item_uid):
     cart_item = get_object_or_404(CartItem, uid=cart_item_uid)  # Fetch or return 404
     cart_item.delete()  # Delete the cart item
     return redirect(request.META.get('HTTP_REFERER', 'cart'))  # Redirect back to cart page
+
+
+@csrf_exempt
+def payment_success(request):
+    cart = Cart.objects.get(user=request.user, is_paid=False)
+    cart.is_paid = True  # Mark cart as paid
+    cart.save()
+    return redirect("cart")  # Redirect to cart or success page
+
+
+
+def create_razorpay_order(request):
+    if request.method == "POST":
+        cart = get_object_or_404(Cart, user=request.user, is_paid=False)
+        total_price = cart.get_cart_total() * 100  # Razorpay takes amount in paise (1 INR = 100 paise)
+        
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        payment_data = {
+            "amount": total_price,
+            "currency": "INR",
+            "payment_capture": 1  # Auto capture payment
+        }
+        order = client.order.create(data=payment_data)
+
+        return JsonResponse(order)  # Return order details as JSON

@@ -144,3 +144,7 @@ EMAIL_HOST_USER = ""  # Your email address
 EMAIL_HOST_PASSWORD = ""  # Your email password
 EMAIL_PORT = 465  # SMTP port
 EMAIL_USE_SSL = True  # Use SSL for secure connection
+
+
+RAZORPAY_KEY_ID = ""
+RAZORPAY_KEY_SECRET = ""

@@ -13,3 +13,5 @@ def get_product(request , slug):
 
     except Exception as e:
         print(e)
+
+
