@@ -140,11 +140,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP host
-EMAIL_HOST_USER = ""  # Your email address
-EMAIL_HOST_PASSWORD = ""  # Your email password
+EMAIL_HOST_USER = "202412071@daiict.ac.in"  # Your email address
+EMAIL_HOST_PASSWORD = "Kavi@1234"  # Your email password
 EMAIL_PORT = 465  # SMTP port
 EMAIL_USE_SSL = True  # Use SSL for secure connection
 
 
-RAZORPAY_KEY_ID = ""
-RAZORPAY_KEY_SECRET = ""
+RAZORPAY_KEY_ID = "rzp_test_usMRshUoS4Po1I"
+RAZORPAY_KEY_SECRET = "P1eCJCXBNY9P0c22Nuf0RKox"

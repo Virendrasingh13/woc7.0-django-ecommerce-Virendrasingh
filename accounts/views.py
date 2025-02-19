@@ -10,7 +10,7 @@ from .models import Profile
 from base.emails import send_account_activation_email
 import uuid
 from products.models import Product
-from accounts.models import Cart,CartItem
+from accounts.models import *
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -149,3 +149,61 @@ def create_razorpay_order(request):
         order = client.order.create(data=payment_data)
 
         return JsonResponse(order)  # Return order details as JSON
+
+
+#order
+
+from django.shortcuts import render, redirect
+from accounts.models import Order, Cart
+import razorpay
+
+def create_razorpay_order(request):
+    if request.method == "POST":
+        cart = get_object_or_404(Cart, user=request.user, is_paid=False)
+        total_price = cart.get_cart_total() * 100  # Razorpay takes amount in paise
+
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        payment_data = {
+            "amount": total_price,
+            "currency": "INR",
+            "payment_capture": 1  # Auto capture payment
+        }
+        order = client.order.create(data=payment_data)
+
+        return JsonResponse(order)  # Return order details as JSON
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+@csrf_exempt
+def payment_success(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("razorpay_payment_id")
+        order_id = request.POST.get("razorpay_order_id")
+        signature = request.POST.get("razorpay_signature")
+
+        try:
+            cart = Cart.objects.get(user=request.user, is_paid=False)
+        except Cart.DoesNotExist:
+            return JsonResponse({"error": "Cart not found"}, status=400)
+
+        # Mark cart as paid
+        cart.is_paid = True
+        cart.save()
+
+        # Create order record
+        Order.objects.create(
+            user=request.user,
+            cart=cart,
+            razorpay_order_id=order_id,
+            razorpay_payment_id=payment_id,
+            razorpay_signature=signature,
+            is_paid=True
+        )
+
+        return JsonResponse({"success": True, "message": "Payment successful!"})
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+def orders_page(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+    return render(request, "accounts/orders.html", {"orders": orders})

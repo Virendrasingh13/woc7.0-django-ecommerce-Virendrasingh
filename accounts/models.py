@@ -35,12 +35,23 @@ class Cart(BaseModel):
     is_paid = models.BooleanField(default=False)
 
     def get_cart_total(self):
-        cart_items = self.cartitems.all()  # Corrected related_name
+        cart_items = self.cartitems.all()
         return sum(cart_item.product.price for cart_item in cart_items if cart_item.product)
 
 class CartItem(BaseModel):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cartitems')  # Corrected related_name
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cartitems')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_product_price(self):
-        return self.product.price if self.product else 0  # Avoids NoneType errors
+        return self.product.price if self.product else 0
+
+class Order(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True)
+    razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
+    razorpay_payment_id = models.CharField(max_length=100, null=True, blank=True)
+    razorpay_signature = models.CharField(max_length=100, null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Order {self.uid} by {self.user.username}"
