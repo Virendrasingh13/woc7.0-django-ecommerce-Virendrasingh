@@ -2,13 +2,17 @@
 
 echo "BUILD START"
 
-# Install dependencies properly
-pip install -r requirements.txt
+# Ensure Python and pip are installed
+python3.9 -m ensurepip --default-pip
+python3.9 -m pip install --upgrade pip setuptools wheel
+
+# Install project dependencies
+python3.9 -m pip install -r requirements.txt
 
 # Run Django collectstatic
-python manage.py collectstatic --noinput --clear
+python3.9 manage.py collectstatic --noinput --clear
 
-# Apply database migrations (if needed)
-python manage.py migrate
+# Apply database migrations
+python3.9 manage.py migrate
 
 echo "BUILD END"
