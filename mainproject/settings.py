@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+INSTALLED_APPS.insert(1, 'whitenoise.runserver_nostatic')  
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -148,3 +151,5 @@ EMAIL_USE_TLS = True  # Use SSL for secure connection
 
 RAZORPAY_KEY_ID = ""
 RAZORPAY_KEY_SECRET = ""
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
