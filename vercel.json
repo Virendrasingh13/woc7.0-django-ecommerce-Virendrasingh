@@ -23,4 +23,5 @@
     "src": "/(.*)",
     "dest": "mainproject/wsgi.py"
     }
+  ]
 }
