@@ -10,10 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
-import os
-INSTALLED_APPS.insert(1, 'whitenoise.runserver_nostatic')  
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  
+# from pathlib import Path
+# INSTALLED_APPS.insert(1, 'whitenoise.runserver_nostatic')  
+# MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +28,7 @@ SECRET_KEY = 'django-insecure-x40#oc1%08qaf)q-1s2=ymz_8se#0d)@ma^x4dr%qbmkewv6+6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.varcel.app]
+ALLOWED_HOSTS = ['.varcel.app' ,'.now.sh']
 
 
 # Application definition
@@ -124,8 +123,6 @@ USE_TZ = True
 
 
 #ADDED THIS LINE
-STATIC_URL = '/static/' # below this add the following line
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -151,5 +148,8 @@ EMAIL_USE_TLS = True  # Use SSL for secure connection
 
 RAZORPAY_KEY_ID = ""
 RAZORPAY_KEY_SECRET = ""
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+import os
+STATIC_URL = '/static/' 
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_bulid','static')
