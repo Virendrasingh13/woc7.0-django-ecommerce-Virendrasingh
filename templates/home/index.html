@@ -1,31 +1,29 @@
 {% extends "base/base.html"%}
 
-{%  block start %}
+{% block start %}
 
-
-<div class="container mt-5 pt-5">
+<div class="container mt-4">
     <div class="row">
-        
         {% for product in products %}
-        <div class="col-md-3">
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
             <figure class="card card-product-grid">
-                <div class="img-wrap"> <img src="/media/{{product.product_images.first.image}}"> </div>
-                <figcaption class="info-wrap border-top">
-                    <a href="{% url 'get_product' product.slug %}" class="title">
-                        <b>{{product.product_name}}</b></a>
-                    <div class="price mt-2"><p>&#x20b9; {{product.price}}</p>
-                        </div> <!-- price-wrap.// -->
+                <a href="{% url 'get_product' product.slug %}" class="title text-truncate d-block" style="max-width: 100%; min-height: 40px;">
+                    <div class="img-wrap">
+                        <img src="/media/{{product.product_images.first.image}}" class="img-fluid">
+                    </div>                
+                </a>
+                <figcaption class="info-wrap border-top text-center">
+                    <a href="{% url 'get_product' product.slug %}" class="title text-truncate d-block" style="max-width: 100%; min-height: 40px;">
+                        <b>{{ product.product_name }}</b>
+                    </a>
+                    <div class="price mt-2">
+                        <p>&#x20b9; {{ product.price }}</p>
+                    </div>
                 </figcaption>
-            </figure> <!-- card // -->
-        </div> <!-- col.// -->
-
+            </figure>
+        </div>
         {% endfor %}
-      
-        
-       
     </div>
-
-    </div>
-
+</div>
 
 {% endblock %}

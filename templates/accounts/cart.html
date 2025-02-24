@@ -3,78 +3,87 @@
 <section class="section-content padding-y bg">
     <div class="container">
         <div class="row">
-            <main class="col-md-9">
+            <!-- Cart Items -->
+            <main class="col-lg-9 col-md-8 col-sm-12">
                 <div class="card">
-                    <table class="table table-borderless table-shopping-cart">
-                        <thead class="text-muted">
-                            <tr class="small text-uppercase">
-                                <th scope="col">Product</th>
-                                <th scope="col" width="120">Quantity</th>
-                                <th scope="col" width="120">Price</th>
-                                <th scope="col" class="text-right" width="200"> </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for cart_item in cart_items %}
-                            <tr>
-                                <td>
-                                    <figure class="itemside">
-                                        <div class="aside">
-                                            {% with cart_item.product.product_images.first as product_image %}
-                                            {% if product_image %}
-                                                <img src="{{ product_image.image.url }}" alt="{{ cart_item.product.product_name }}" width="100">
-                                            {% else %}
-                                                <img src="https://via.placeholder.com/100" alt="No Image Available">
-                                            {% endif %}
-                                        {% endwith %}
-                        
-                            
-                            
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-shopping-cart">
+                            <thead class="text-muted">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Product</th>
+                                    <th scope="col" width="120">Quantity</th>
+                                    <th scope="col" width="120">Price</th>
+                                    <th scope="col" class="text-right" width="120">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item in cart_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                {% with cart_item.product.product_images.first as product_image %}
+                                                {% if product_image %}
+                                                    <img src="{{ product_image.image.url }}" alt="{{ cart_item.product.product_name }}" width="80" class="img-fluid">
+                                                {% else %}
+                                                    <img src="https://via.placeholder.com/100" alt="No Image Available" width="80" class="img-fluid">
+                                                {% endif %}
+                                                {% endwith %}
+                                            </div>
+                                            <div class="ml-3">
+                                                <a href="#" class="title text-dark d-block text-truncate" style="max-width: 180px;">
+                                                    {{ cart_item.product.product_name }}
+                                                </a>
+                                                <p class="text-muted small m-0">{{ cart_item.product.product_desription|truncatewords:10 }}</p>
+                                            </div>
                                         </div>
-                                        <figcaption class="info"> <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
-                                            <p class="text-muted small">{{cart_item.product.product_desription|truncatewords:10 }} </p>
-                                        </figcaption>
-                                    </figure>
-                                </td>
-                                <td>
-                                    <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <div class="price-wrap"><var class="price"></var> <div class="text-dark">{{ cart_item.get_product_price }}</div> </div> 
-                                    <!-- price-wrap .// -->
-                                </td>
-                                <td class="text-right">
-                                    <a data-original-title="Save to Wishlist" title="" href="#" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
-                                    <a href="{% url 'remove_cart' cart_item.uid %}" class="btn btn-light"> Remove</a>
-                                </td>
-                            </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td>
+                                        <select class="custom-select w-auto">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price text-dark">{{ cart_item.get_product_price }}</var>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="{% url 'remove_cart' cart_item.uid %}" class="btn btn-outline-danger btn-sm"> Remove</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive.// -->
                 </div> <!-- card.// -->
             </main> <!-- col.// -->
-            <aside class="col-md-3">
+
+            <!-- Sidebar -->
+            <aside class="col-lg-3 col-md-4 col-sm-12">
+                <!-- Coupon Section -->
                 <div class="card mb-3">
                     <div class="card-body">
                         <form>
-                            <div class="form-group"> <label>Have coupon?</label>
-                                <div class="input-group"> <input type="text" class="form-control" name="" placeholder="Coupon code">
-                                    <span class="input-group-append"> <button class="btn btn-primary">Apply</button> </span>
+                            <div class="form-group">
+                                <label>Have a coupon?</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Enter coupon code">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary">Apply</button>
+                                    </div>
                                 </div>
                             </div>
                         </form>
                     </div> <!-- card-body.// -->
                 </div> <!-- card .// -->
+
+                <!-- Order Summary -->
                 <div class="card">
                     <div class="card-body">
-
                         <dl class="dlist-align">
                             <dt>Total:</dt>
                             <dd class="text-right"><strong>{{ cart.get_cart_total }}</strong></dd>
@@ -146,4 +155,3 @@
 
 {% block end %}
 {% endblock %}
-

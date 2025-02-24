@@ -20,7 +20,7 @@ import razorpay
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from accounts.models import Cart  # Your cart model
+from accounts.models import Cart  
 
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
