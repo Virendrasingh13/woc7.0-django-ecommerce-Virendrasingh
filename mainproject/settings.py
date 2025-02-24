@@ -146,6 +146,10 @@ EMAIL_USE_TLS = True  # Use SSL for secure connection
 RAZORPAY_KEY_ID = ""
 RAZORPAY_KEY_SECRET = ""
 
-STATIC_URL = '/static/' 
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = [os.path.join(BASE_DIR, 'staticfiles_bulid','static')]
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
