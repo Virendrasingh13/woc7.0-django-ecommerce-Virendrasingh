@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-x40#oc1%08qaf)q-1s2=ymz_8se#0d)@ma^x4dr%qbmkewv6+6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.varcel.app]
 
 
 # Application definition
